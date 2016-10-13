@@ -42,7 +42,7 @@ public class StudentDaoTest {
     @Test
     public void add() {
         Student student = new Student();
-        student.setGroup(studentDao.getAll().get(0).getGroup());
+        student.setGroup(studentDao.getAll().get(1).getGroup());
         student.setFirstName("TestStudentFName");
         student.setMiddleName("TestStudentMName");
         student.setLastName("TestStudentLName");
@@ -78,6 +78,6 @@ public class StudentDaoTest {
 
     @Test
     public void getAllByGroup(){
-        Assert.assertEquals(1,studentDao.getAllFilteredByGroup("1403").size());
+        Assert.assertEquals(1,studentDao.getAllFilteredByGroup("1101").size());
     }
 }

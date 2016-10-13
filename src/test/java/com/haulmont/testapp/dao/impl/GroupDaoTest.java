@@ -44,6 +44,7 @@ public class GroupDaoTest {
     public void add() {
         Group group = new Group();
         group.setNumber("0000");
+        group.setFaculty("Faculty");
         groupDao.add(group);
         Assert.assertEquals(group, groupDao.getAll().get(groupDao.getAll().size() - 1));
     }
