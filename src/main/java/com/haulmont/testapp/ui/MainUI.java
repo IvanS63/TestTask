@@ -116,6 +116,9 @@ public class MainUI extends UI {
         }
         filterOption.setNullSelectionAllowed(false);
         filterOption.setValue(filterOptionValues[0]);
+        filterText.addTextChangeListener(ex ->
+                studentsGrid.setContainerDataSource(new BeanItemContainer<>(Student.class,
+                        studentService.getAllFilteredByLastname(ex.getText()))));
     }
 
     /**
