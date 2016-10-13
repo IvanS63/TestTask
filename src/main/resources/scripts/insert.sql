@@ -1,0 +1,3 @@
+INSERT INTO groups (number,faculty) VALUES('1101','Computer Science'),('1402','Economics'),('1403','Philosophy'),('2404','Law'),('3405','Science');
+
+INSERT INTO student (first_name,middle_name,last_name,birth_date,group_id ) VALUES('Petr','Ivanovich','Ivanov','1993-02-05',1),('Petr','Ivanovich','Petrov','1995-02-02',2),('Ivan','Ivanovich','Ivanov','1994-01-12',2),('Ivan','Ivanovich','Ivanov','1994-01-30',3),('Ivan','Ivanovich','Ivanov','1993-11-12',4),('Ivan','Ivanovich','Ivanov','1993-11-11',4);
