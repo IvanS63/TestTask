@@ -70,6 +70,6 @@ public class GroupDaoTest {
 
     @Test
     public void getAll() {
-        Assert.assertNotNull(groupDao.getAll());
+        Assert.assertEquals(3,groupDao.getAll().size());
     }
 }
