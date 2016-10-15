@@ -26,7 +26,7 @@ public class GroupDao implements IGroupDao {
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public static synchronized IGroupDao getInstance() {
+    public static IGroupDao getInstance() {
         if (instance == null) {
             instance = new GroupDao();
         }
@@ -83,6 +83,7 @@ public class GroupDao implements IGroupDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Group> getAll() {
         List<Group> groupList = null;
         try {

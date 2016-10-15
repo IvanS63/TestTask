@@ -4,10 +4,7 @@ import com.haulmont.testapp.dao.IStudentDao;
 import com.haulmont.testapp.entity.Student;
 import org.apache.log4j.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import java.util.List;
 
 public class StudentDao implements IStudentDao {
@@ -27,7 +24,7 @@ public class StudentDao implements IStudentDao {
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public static synchronized IStudentDao getInstance() {
+    public static IStudentDao getInstance() {
         if (instance == null) {
             instance = new StudentDao();
         }
@@ -79,9 +76,11 @@ public class StudentDao implements IStudentDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Student> getAll() {
         List<Student> studentList = null;
         try {
+            entityManager.clear();
             entityManager.getTransaction().begin();
             studentList = entityManager.createQuery(GET_ALL_QUERY).getResultList();
             entityManager.getTransaction().commit();
@@ -94,6 +93,7 @@ public class StudentDao implements IStudentDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Student> getAllFilteredByGroup(String value) {
         List<Student> filteredList = null;
         try {
@@ -110,6 +110,7 @@ public class StudentDao implements IStudentDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Student> getAllFilteredByLastname(String value) {
         List<Student> filteredList = null;
         try {
