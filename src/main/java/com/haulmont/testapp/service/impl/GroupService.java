@@ -18,7 +18,7 @@ public class GroupService implements IGroupService {
         groupDao = GroupDao.getInstance();
     }
 
-    public static synchronized IGroupService getInstance() {
+    public static IGroupService getInstance() {
         if (instance == null) {
             instance = new GroupService();
         }
@@ -37,14 +37,8 @@ public class GroupService implements IGroupService {
 
     @Override
     public void remove(Group group) throws GroupDeleteException {
-        try {
-            groupDao.remove(group);
-        }
-        catch (GroupDeleteException ex){
-            throw ex;
-        }
+        groupDao.remove(group);
     }
-
 
     @Override
     public List<Group> getAll() {

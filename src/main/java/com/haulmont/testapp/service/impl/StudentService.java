@@ -17,7 +17,7 @@ public class StudentService implements IStudentService {
         studentDao = StudentDao.getInstance();
     }
 
-    public static synchronized IStudentService getInstance() {
+    public static IStudentService getInstance() {
         if (instance == null) {
             instance = new StudentService();
         }
