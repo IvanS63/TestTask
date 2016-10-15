@@ -1,9 +1,8 @@
 package com.haulmont.testapp.entity;
 
 import javax.persistence.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "student")
@@ -78,5 +77,22 @@ public class Student {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(firstName, student.firstName) &&
+                Objects.equals(middleName, student.middleName) &&
+                Objects.equals(lastName, student.lastName) &&
+                Objects.equals(birthDate, student.birthDate) &&
+                Objects.equals(group, student.group);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, middleName, lastName, birthDate, group);
     }
 }
