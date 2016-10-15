@@ -13,10 +13,11 @@ import com.haulmont.testapp.ui.window.GroupEditWindow;
 import com.haulmont.testapp.ui.window.StudentEditWindow;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 @Theme("mytheme")
 public class MainUI extends UI {
@@ -26,8 +27,8 @@ public class MainUI extends UI {
 
     private IGroupService groupService;
 
-    private Grid studentsGrid = new Grid();
-    private Grid groupsGrid = new Grid();
+    private final Grid studentsGrid = new Grid();
+    private final Grid groupsGrid = new Grid();
 
     private Student student;
     private Group group;
@@ -45,6 +46,8 @@ public class MainUI extends UI {
     private final NativeSelect filterOption = new NativeSelect();
     private final String[] filterOptionValues = new String[]{"Lastname", "Group"};
     private final VerticalLayout layout = new VerticalLayout();
+    private final TabSheet tabsheet=new TabSheet();
+
 
 
     @Override
@@ -59,13 +62,11 @@ public class MainUI extends UI {
      * Init form components and layout
      */
     private void initFormComponents() {
-        groupsGrid.setColumns("number", "faculty");
-        studentsGrid.setColumns("firstName", "middleName", "lastName", "birthDate", "group");
-        TabSheet tabsheet = new TabSheet();
-        layout.addComponent(tabsheet);
 
-        VerticalLayout studentTabVerticalLayout = new VerticalLayout();
-        VerticalLayout groupTabVerticalLayout = new VerticalLayout();
+        layout.addComponent(tabsheet);
+        VerticalLayout studentTabVerticalLayout= new VerticalLayout();
+        VerticalLayout groupTabVerticalLayout= new VerticalLayout();
+
         HorizontalLayout filterElementsLayout = new HorizontalLayout(filterLabel, filterOption, filterText);
         filterElementsLayout.setMargin(true);
         filterElementsLayout.setSpacing(true);
@@ -74,36 +75,40 @@ public class MainUI extends UI {
                 openAddStudentModalWindowBtn, openEditStudentModalWindowBtn, deleteStudentBtn);
         studentBtnLayout.setMargin(true);
         studentBtnLayout.setSpacing(true);
+
         HorizontalLayout groupBtnLayout = new HorizontalLayout(
                 openAddGroupModalWindowBtn, openEditGroupModalWindowBtn, deleteGroupBtn);
         groupBtnLayout.setSpacing(true);
         groupBtnLayout.setMargin(true);
 
-
+        studentTabVerticalLayout.setCaption("Students");
         studentTabVerticalLayout.addComponent(filterElementsLayout);
         studentTabVerticalLayout.addComponent(studentsGrid);
         studentTabVerticalLayout.addComponent(studentBtnLayout);
+
+        groupTabVerticalLayout.setCaption("Group");
         groupTabVerticalLayout.addComponent(groupsGrid);
         groupTabVerticalLayout.addComponent(groupBtnLayout);
 
-        tabsheet.addTab(studentTabVerticalLayout, "Students");
-        tabsheet.addTab(groupTabVerticalLayout, "Groups");
+        tabsheet.addTab(studentTabVerticalLayout);
+        tabsheet.addTab(groupTabVerticalLayout);
 
-        layout.setComponentAlignment(tabsheet, Alignment.TOP_CENTER);
-        tabsheet.setSizeUndefined();
+
+        tabsheet.setSizeFull();
+        studentsGrid.setSizeFull();
         layout.setMargin(true);
         setContent(layout);
 
+        groupsGrid.setColumns("number", "faculty");
+        studentsGrid.setColumns("firstName", "middleName", "lastName", "birthDate", "group");
         updateStudentTable();
         updateGroupTable();
 
-        openEditGroupModalWindowBtn.setEnabled(false);
-        deleteGroupBtn.setEnabled(false);
-        openEditStudentModalWindowBtn.setEnabled(false);
-        deleteStudentBtn.setEnabled(false);
+        setEditDeleteBtnsDisabled();
 
-        filterText.setInputPrompt("Type here...");
         initSelectBox();
+
+
 
     }
 
@@ -111,6 +116,7 @@ public class MainUI extends UI {
      * Set filter options to select box
      */
     private void initSelectBox() {
+        filterText.setInputPrompt("Type here...");
         for (String s : filterOptionValues) {
             filterOption.addItem(s);
         }
@@ -149,12 +155,20 @@ public class MainUI extends UI {
 
         filterOption.addValueChangeListener(e -> {
             if (filterOption.getValue().equals("Group")) {
+                filterText.setValue("");
                 filterText.addTextChangeListener(ev -> studentsGrid.setContainerDataSource(new BeanItemContainer<>(Student.class,
                         studentService.getAllFilteredByGroup(ev.getText()))));
             } else {
+                filterText.setValue("");
                 filterText.addTextChangeListener(ex ->
                         studentsGrid.setContainerDataSource(new BeanItemContainer<>(Student.class,
                                 studentService.getAllFilteredByLastname(ex.getText()))));
+            }
+        });
+        tabsheet.addSelectedTabChangeListener(e->{
+            if (e.getTabSheet().getSelectedTab().getCaption().equals("Students")){
+                filterText.setValue("");
+                updateStudentTable();
             }
         });
 
@@ -200,10 +214,11 @@ public class MainUI extends UI {
     private void deleteGroup(Group group) {
         try {
             groupService.remove(group);
-            updateGroupTable();
         } catch (GroupDeleteException ex) {
-            updateGroupTable();
             Notification.show("This group contains students! You can't delete it!", Notification.Type.ERROR_MESSAGE);
+        }
+        finally {
+            updateGroupTable();
         }
     }
 
@@ -211,6 +226,7 @@ public class MainUI extends UI {
      * Refresh student table from database
      */
     private void updateStudentTable() {
+        List<Student> list=studentService.getAll();
         studentsGrid.setContainerDataSource(new BeanItemContainer<>(Student.class, studentService.getAll()));
         setEditDeleteBtnsDisabled();
     }

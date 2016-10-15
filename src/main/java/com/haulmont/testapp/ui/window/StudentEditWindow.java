@@ -8,7 +8,6 @@ import com.haulmont.testapp.service.impl.GroupService;
 import com.haulmont.testapp.service.impl.StudentService;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.validator.NullValidator;
