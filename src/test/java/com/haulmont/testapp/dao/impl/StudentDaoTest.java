@@ -18,8 +18,6 @@ public class StudentDaoTest {
     private EntityManager entityManager;
     private IStudentDao studentDao;
 
-
-
     @Before
     public void beforeTest() {
         entityManagerFactory = Persistence.createEntityManagerFactory("unit-test-persistence-unit");
@@ -36,7 +34,6 @@ public class StudentDaoTest {
 
     @Test
     public void add() {
-        List<Student>list=studentDao.getAll();
         Student student = studentDao.getAll().get(1);
         studentDao.add(student);
         Assert.assertEquals(3, studentDao.getAll().size());
@@ -53,21 +50,21 @@ public class StudentDaoTest {
     @Test
     public void remove() {
         studentDao.remove(studentDao.getAll().get(2));
-        Assert.assertEquals(2,studentDao.getAll().size());
+        Assert.assertEquals(2, studentDao.getAll().size());
     }
 
     @Test
     public void getAll() {
-        Assert.assertEquals(3,studentDao.getAll().size());
+        Assert.assertEquals(3, studentDao.getAll().size());
     }
 
     @Test
-    public void getAllByLastname(){
-        Assert.assertEquals(1,studentDao.getAllFilteredByLastname("Petrov").size());
+    public void getAllByLastname() {
+        Assert.assertEquals(1, studentDao.getAllFilteredByLastname("Petrov").size());
     }
 
     @Test
-    public void getAllByGroup(){
-        Assert.assertEquals(1,studentDao.getAllFilteredByGroup("1101").size());
+    public void getAllByGroup() {
+        Assert.assertEquals(1, studentDao.getAllFilteredByGroup("1101").size());
     }
 }
