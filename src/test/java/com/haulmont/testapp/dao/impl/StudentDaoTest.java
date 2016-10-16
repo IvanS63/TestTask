@@ -18,19 +18,11 @@ public class StudentDaoTest {
     private EntityManager entityManager;
     private IStudentDao studentDao;
 
-    @BeforeClass
-    public static void init() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("unit-test-persistence-unit");
 
-    }
-
-    @AfterClass
-    public static void close() {
-        entityManagerFactory.close();
-    }
 
     @Before
     public void beforeTest() {
+        entityManagerFactory = Persistence.createEntityManagerFactory("unit-test-persistence-unit");
         entityManager = entityManagerFactory.createEntityManager();
         studentDao = StudentDao.getInstance();
         studentDao.setEntityManager(entityManager);
@@ -39,34 +31,29 @@ public class StudentDaoTest {
     @After
     public void afterTest() {
         entityManager.close();
+        entityManagerFactory.close();
     }
 
     @Test
-    @Ignore
     public void add() {
+        List<Student>list=studentDao.getAll();
         Student student = studentDao.getAll().get(1);
         studentDao.add(student);
-        List<Student> list=studentDao.getAll();
-        Assert.assertEquals(student, studentDao.getAll().get(studentDao.getAll().size() - 1));
+        Assert.assertEquals(3, studentDao.getAll().size());
     }
 
-    @Ignore
     @Test
     public void update() {
         Student student = studentDao.getAll().get(0);
         student.setFirstName("NewFirstName");
         studentDao.update(student);
-        Assert.assertEquals(student, studentDao.getAll().get(0));
+        Assert.assertEquals("NewFirstName", studentDao.getAll().get(0).getFirstName());
     }
 
-    @Ignore
     @Test
     public void remove() {
-        int sizeBeforeDelete = studentDao.getAll().size();
-        List<Student> list=studentDao.getAll();
-        studentDao.remove(studentDao.getAll().get((studentDao.getAll().size() - 1)));
-        list=studentDao.getAll();
-        Assert.assertEquals(sizeBeforeDelete - 1, studentDao.getAll().size());
+        studentDao.remove(studentDao.getAll().get(2));
+        Assert.assertEquals(2,studentDao.getAll().size());
     }
 
     @Test
