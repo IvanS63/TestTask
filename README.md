@@ -5,11 +5,11 @@ Web-application for university students management
 
 Technologies
 ==============
-Maven,
-Java 8,
-Vaadin framework,
-JPA ,
-HSQLDB
+- Maven
+- Java 8
+- Vaadin framework
+- JPA (Hibernate)
+- HSQLDB
 
 
 Workflow
